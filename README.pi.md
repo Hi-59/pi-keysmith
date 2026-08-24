@@ -20,3 +20,22 @@ python3 pi-instruct.py --pi-dir ~/.pi/agent --uninstall --yes
 Use `--file ./my-prompt.md` for a custom prompt. Every write is preview-only unless `--yes` is supplied. Existing `APPEND_SYSTEM.md` is backed up and restored by uninstall. If the managed file changes after installation, the tool refuses to overwrite or uninstall it.
 
 After installation, restart Pi or run `/reload`.
+
+## Session toggle
+
+To switch the managed prompt without leaving the current Pi session, install the optional extension:
+
+```bash
+mkdir -p ~/.pi/agent/extensions
+cp pi-keysmith-toggle.ts ~/.pi/agent/extensions/
+```
+
+In Pi, run `/reload` once. Then use:
+
+```text
+/keysmith-on
+/keysmith-off
+/keysmith-status
+```
+
+`/keysmith-on` and `/keysmith-off` affect the current session's system prompt on the next request. They do not edit `APPEND_SYSTEM.md`; uninstall remains the permanent switch. The extension starts enabled so existing deployments keep their current behavior.

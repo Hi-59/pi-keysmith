@@ -19,19 +19,23 @@ function promptText(): string {
 export default function keysmithToggle(pi: ExtensionAPI) {
   let enabled = true;
 
+  const setState = (next: boolean, ctx: any) => {
+    enabled = next;
+    ctx.ui.setStatus("pi-keysmith", next ? "未来已至" : "已到现实");
+    ctx.ui.notify(next ? "未来已至" : "已到现实", "info");
+  };
+
   pi.registerCommand("keysmith-on", {
     description: "Enable the Pi Keysmith prompt for this session",
     handler: (_args, ctx) => {
-      enabled = true;
-      ctx.ui.notify("Pi Keysmith enabled for this session", "info");
+      setState(true, ctx);
     },
   });
 
   pi.registerCommand("keysmith-off", {
     description: "Disable the Pi Keysmith prompt for this session",
     handler: (_args, ctx) => {
-      enabled = false;
-      ctx.ui.notify("Pi Keysmith disabled for this session", "info");
+      setState(false, ctx);
     },
   });
 
@@ -48,13 +52,11 @@ export default function keysmithToggle(pi: ExtensionAPI) {
   pi.on("input", (_event, ctx) => {
     const text = _event.text.trim();
     if (text === "感受未来") {
-      enabled = true;
-      ctx.ui.notify("Pi Keysmith enabled for this session", "info");
+      setState(true, ctx);
       return { action: "handled" };
     }
     if (text === "回到现在") {
-      enabled = false;
-      ctx.ui.notify("Pi Keysmith disabled for this session", "info");
+      setState(false, ctx);
       return { action: "handled" };
     }
     return { action: "continue" };

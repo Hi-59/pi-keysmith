@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -27,9 +28,9 @@ def test_install_status_conflict_and_uninstall(tmp_path):
     assert conflict.returncode == 1
     assert json.loads((pi / ".pi-keysmith-manifest.json").read_text())["target"] == "APPEND_SYSTEM.md"
 
-    (pi / "APPEND_SYSTEM.md").write_text(
-        (Path(__file__).parents[1] / "examples/gpt-contract.md").read_text(encoding="utf-8"),
-        encoding="utf-8",
+    shutil.copyfile(
+        Path(__file__).parents[1] / "examples/gpt-contract.md",
+        pi / "APPEND_SYSTEM.md",
     )
     assert run("--pi-dir", str(pi), "--uninstall", "--yes").returncode == 0
     assert not (pi / ".pi-keysmith-manifest.json").exists()

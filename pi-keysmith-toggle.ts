@@ -45,15 +45,28 @@ export default function keysmithToggle(pi: ExtensionAPI) {
     },
   });
 
-  pi.on("before_agent_start", async (event) => {
+  pi.on("input", (_event, ctx) => {
+    const text = _event.text.trim();
+    if (text === "感受未来") {
+      enabled = true;
+      ctx.ui.notify("Pi Keysmith enabled for this session", "info");
+      return { action: "handled" };
+    }
+    if (text === "回到现在") {
+      enabled = false;
+      ctx.ui.notify("Pi Keysmith disabled for this session", "info");
+      return { action: "handled" };
+    }
+    return { action: "continue" };
+  });
+
+  pi.on("before_agent_start", (event) => {
     const prompt = promptText();
     if (!prompt) return undefined;
 
     const withoutPrompt = event.systemPrompt.split(prompt).join("").trim();
     return {
-      systemPrompt: enabled
-        ? `${withoutPrompt}\n\n${prompt}`
-        : withoutPrompt,
+      systemPrompt: enabled ? `${withoutPrompt}\n\n${prompt}` : withoutPrompt,
     };
   });
 }

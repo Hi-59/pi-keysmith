@@ -30,12 +30,14 @@ mkdir -p ~/.pi/agent/extensions
 cp pi-keysmith-toggle.ts ~/.pi/agent/extensions/
 ```
 
-In Pi, run `/reload` once. Then use:
+In Pi, run `/reload` once. Then use either the normal input phrases or the slash commands:
 
 ```text
+感受未来       # enable for this session
+回到现在       # disable for this session
 /keysmith-on
 /keysmith-off
 /keysmith-status
 ```
 
-`/keysmith-on` and `/keysmith-off` affect the current session's system prompt on the next request. They do not edit `APPEND_SYSTEM.md`; uninstall remains the permanent switch. The extension starts enabled so existing deployments keep their current behavior.
+The two Chinese phrases are intercepted before the message reaches the model, so they do not become conversation messages. `/keysmith-on` and `/keysmith-off` affect the current session's system prompt on the next request. They do not edit `APPEND_SYSTEM.md`; uninstall remains the permanent switch. The extension starts enabled so existing deployments keep their current behavior.

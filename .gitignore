@@ -7,6 +7,8 @@ outputs/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.venv/
+.pytest-run.log
 .coverage
 htmlcov/
 

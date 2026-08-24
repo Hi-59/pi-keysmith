@@ -25,10 +25,12 @@ ARCHIVE_FILES = (
     "PRIVACY.md",
     "README.en.md",
     "README.md",
+    "AGENT-DEPLOY.md",
     "SECURITY.md",
     "VERSION",
     "codex-instruct.py",
     "docs/agent-install.md",
+    "docs/agent-deploy-pi.md",
     "docs/assets/readme/codex-keysmith-preview.png",
     "docs/ccswitch.md",
     "docs/hooks-transactions.md",
@@ -116,7 +118,10 @@ def _fixture_pack_archive_files(repo_root: Path) -> Tuple[str, ...]:
     files = []
     seen_casefold = set()
     for path in sorted(pack_root.rglob("*")):
-        file_stat = os.lstat(str(path))
+        try:
+            file_stat = os.lstat(str(path))
+        except OSError as exc:
+            raise ReleaseError("cannot inspect fixture archive member: {}".format(path)) from exc
         if stat.S_ISDIR(file_stat.st_mode):
             continue
         if not stat.S_ISREG(file_stat.st_mode):
@@ -152,7 +157,10 @@ def _scenario_archive_files(repo_root: Path) -> Tuple[str, ...]:
     files = []
     seen_casefold = set()
     for path in sorted(scenario_root.rglob("*")):
-        file_stat = os.lstat(str(path))
+        try:
+            file_stat = os.lstat(str(path))
+        except OSError as exc:
+            raise ReleaseError("cannot inspect scenario archive member: {}".format(path)) from exc
         if stat.S_ISDIR(file_stat.st_mode):
             continue
         if not stat.S_ISREG(file_stat.st_mode):

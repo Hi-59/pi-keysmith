@@ -180,6 +180,9 @@ jobs:
           scripts/run_prompt_bank_regression.py
           scripts/run_scenario_bank.py
 
+      - name: Run Pi adapter smoke test
+        run: python tests/test_pi_instruct.py
+
       - name: Run Ruff
         run: python -m ruff check codex-instruct.py tests scripts
 

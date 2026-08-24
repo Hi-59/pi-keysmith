@@ -38,6 +38,9 @@ In Pi, run `/reload` once. Then use either the normal input phrases or the slash
 /keysmith-on
 /keysmith-off
 /keysmith-status
+/keysmith-test
 ```
+
+`/keysmith-test` 自动检查 `APPEND_SYSTEM.md` 并向模型发送一次性测试消息。正常结果是模型只回复 `PI_KEYSMITH_ACTIVE`；它不会替换正式提示词，也不需要手动恢复文件。
 
 The two Chinese phrases are intercepted before the message reaches the model, so they do not become conversation messages. `/keysmith-on` and `/keysmith-off` affect the current session's system prompt on the next request. They do not edit `APPEND_SYSTEM.md`; uninstall remains the permanent switch. The extension starts enabled so existing deployments keep their current behavior.

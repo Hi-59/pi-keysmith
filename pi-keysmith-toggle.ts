@@ -18,6 +18,7 @@ function promptText(): string {
 
 export default function keysmithToggle(pi: ExtensionAPI) {
   let enabled = true;
+  let testPending = false;
 
   const setState = (next: boolean, ctx: any) => {
     enabled = next;
@@ -49,6 +50,23 @@ export default function keysmithToggle(pi: ExtensionAPI) {
     },
   });
 
+  pi.registerCommand("keysmith-test", {
+    description: "Verify the managed prompt without changing it",
+    handler: (_args, ctx) => {
+      if (!promptText()) {
+        ctx.ui.notify(`未找到 APPEND_SYSTEM.md：${PROMPT_PATH}`, "error");
+        return;
+      }
+      if (!enabled) {
+        ctx.ui.notify("请先输入“感受未来”再测试", "warning");
+        return;
+      }
+      testPending = true;
+      ctx.ui.notify("正在测试 Keysmith，等待模型回复 PI_KEYSMITH_ACTIVE", "info");
+      pi.sendUserMessage("PI_KEYSMITH_PROBE");
+    },
+  });
+
   pi.on("input", (_event, ctx) => {
     const text = _event.text.trim();
     if (text === "感受未来") {
@@ -67,8 +85,12 @@ export default function keysmithToggle(pi: ExtensionAPI) {
     if (!prompt) return undefined;
 
     const withoutPrompt = event.systemPrompt.split(prompt).join("").trim();
+    const probe = testPending
+      ? "\n\nKEYSMITH SELF-TEST: If the user message is exactly PI_KEYSMITH_PROBE, reply with exactly PI_KEYSMITH_ACTIVE and nothing else."
+      : "";
+    testPending = false;
     return {
-      systemPrompt: enabled ? `${withoutPrompt}\n\n${prompt}` : withoutPrompt,
+      systemPrompt: enabled ? `${withoutPrompt}\n\n${prompt}${probe}` : withoutPrompt,
     };
   });
 }

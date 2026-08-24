@@ -62,7 +62,10 @@ export default function keysmithToggle(pi: ExtensionAPI) {
         return;
       }
       testPending = true;
-      ctx.ui.notify("正在测试 Keysmith，等待模型回复 PI_KEYSMITH_ACTIVE", "info");
+      ctx.ui.notify(
+        "正在测试 Keysmith，等待模型回复 PI_KEYSMITH_ACTIVE",
+        "info",
+      );
       pi.sendUserMessage("PI_KEYSMITH_PROBE");
     },
   });
@@ -90,7 +93,9 @@ export default function keysmithToggle(pi: ExtensionAPI) {
       : "";
     testPending = false;
     return {
-      systemPrompt: enabled ? `${withoutPrompt}\n\n${prompt}${probe}` : withoutPrompt,
+      systemPrompt: enabled
+        ? `${withoutPrompt}\n\n${prompt}${probe}`
+        : withoutPrompt,
     };
   });
 }

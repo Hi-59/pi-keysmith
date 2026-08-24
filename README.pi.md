@@ -21,6 +21,8 @@ Use `--file ./my-prompt.md` for a custom prompt. Every write is preview-only unl
 
 After installation, restart Pi or run `/reload`.
 
+Agent-only deployment guide: [`docs/agent-deploy-pi.md`](docs/agent-deploy-pi.md).
+
 ## Session toggle
 
 To switch the managed prompt without leaving the current Pi session, install the optional extension:
